@@ -1,5 +1,5 @@
 import{App}from'@modelcontextprotocol/ext-apps';import{OpenAIExtensions}from'@openai/mcp-extensions/app';
-const app=new App({name:'codex-local-office',version:'0.4.0'},{},{autoResize:false}),ext=new OpenAIExtensions(app);
+const app=new App({name:'codex-local-office',version:'0.5.0'},{},{autoResize:false}),ext=new OpenAIExtensions(app);
 const status=document.getElementById('status');document.getElementById('editor').remove();status.style.cssText='padding:20px;height:auto;white-space:pre-wrap;line-height:1.8';
 let connected=false,pending,opening=false,session;
 const show=s=>status.textContent=s;

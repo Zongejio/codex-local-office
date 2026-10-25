@@ -1,6 +1,6 @@
 import fs from'node:fs/promises';import os from'node:os';import path from'node:path';import net from'node:net';import{spawn}from'node:child_process';import{randomBytes}from'node:crypto';import{createInterface}from'node:readline/promises';import{root,dataDir,runtimeFile,limaHome}from'../src/paths.mjs';
 const args=new Set(process.argv.slice(2)),dry=args.has('--dry-run');
-if(dry){console.log(JSON.stringify({platform:'macOS Apple Silicon',dataLocation:'~/Library/Application Support/CodexLocalOffice',ports:[43228,43232,43233],downloads:['Ubuntu image (SHA-256 pinned)','ONLYOFFICE 10.0.0-169 (signed APT)'],changes:['dedicated VM without host mounts','per-machine secrets and localhost leaf certificate','generated Codex marketplace'],manualApproval:['trust localhost certificate','install Codex plugin'],cloudUpload:false,docker:false},null,2));process.exit(0);}
+if(dry){console.log(JSON.stringify({platform:'macOS Apple Silicon',dataLocation:'~/Library/Application Support/CodexLocalOffice',ports:[43228,43232,43233],downloads:['Ubuntu image (SHA-256 pinned)','ONLYOFFICE 10.0.0-169 (signed APT)'],changes:['dedicated VM without host mounts','per-machine secrets and localhost leaf certificate','generated Codex marketplace'],manualApproval:['trust localhost certificate'],cloudUpload:false,docker:false},null,2));process.exit(0);}
 if(process.platform!=='darwin'||process.arch!=='arm64')throw Error('此安装器目前仅支持 Apple 芯片 Mac。没有执行安装。');
 function run(command,argv,{input,env,quiet=false}={}){return new Promise((resolve,reject)=>{const p=spawn(command,argv,{cwd:root,env:{...process.env,...env},stdio:[input===undefined?'inherit':'pipe',quiet?'ignore':'inherit','inherit']});p.on('error',reject);p.on('exit',code=>code===0?resolve():reject(Error(`${path.basename(command)} 未完成（${code}）`)));if(input!==undefined)p.stdin.end(input);});}
 async function findCommand(n){for(const folder of (process.env.PATH||'').split(path.delimiter)){const p=path.join(folder,n);try{await fs.access(p,1);return p}catch{}}throw Error('未找到 '+n+'，请先完成 README 中的依赖安装。');}
@@ -29,9 +29,12 @@ await run(limactl,['shell','codex-office','sudo','python3','-c',await fs.readFil
 await run(limactl,['shell','codex-office','sudo','systemctl','restart','ds-docservice','ds-converter'],{env});
 console.log('需要信任只用于 localhost 的本机证书，才能在 Codex 中打开。证书不是通用 CA。');
 await run(openssl,['x509','-in',cert,'-noout','-fingerprint','-sha256']);
-const trust=await rl.question('是否添加此证书到你的登录钥匙串？系统可能要求确认。[y/N] ');
+let trust='n';
+if(args.has('--gui')){
+ await run('/usr/bin/osascript',['-e','display dialog "即将为本机 localhost 编辑器添加连接证书。仅用于这台电脑上的 Office 编辑，不是通用根证书。系统可能要求确认。" with title "Office 本地编辑器" buttons {"取消安装", "允许并继续"} default button "允许并继续" cancel button "取消安装"']);trust='y';
+}else if(!args.has('--skip-trust'))trust=await rl.question('是否添加此证书到你的登录钥匙串？系统可能要求确认。[y/N] ');
 if(/^y(es)?$/i.test(trust))await run('/usr/bin/security',['add-trusted-cert','-r','trustRoot','-p','ssl','-k',path.join(os.homedir(),'Library/Keychains/login.keychain-db'),cert]);
 else console.log('已保留安装；尚未授予证书信任，编辑器暂不可用。重新运行安装器可继续。');
 const {generateMarketplace}=await import('./configure-plugin.mjs');await generateMarketplace();
-console.log('安装配置完成。请按 README 的“安装 Codex 插件”步骤完成注册。');
+console.log('本机配置已完成。');
 }finally{rl.close();}

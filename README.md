@@ -12,48 +12,19 @@
 - Windows、Intel Mac、云端文件、旧格式 `.doc/.xls/.ppt` **尚未支持或验证**。
 - 编辑器为 ONLYOFFICE Docs Community，不是 Microsoft Office 或 WPS，复杂排版、宏和特殊功能不能保证完全兼容。本项目禁用宏与额外插件。
 
-Word 文本修改、Excel 单元格修改、PPT 新增幻灯片，以及本地保存后重新打开已在开发机器验证。发布代码的 10 项自动测试和 GitHub macOS/Linux 检查通过；另在新建的本地虚拟环境验证了三种格式的引擎转换、签名回调和原文件写回。**本发布安装器尚未完成第二台干净 Mac 的端到端安装验收**。自动检查不等于所有系统和 Office 功能均已验证。
+Word 文本修改、Excel 单元格修改、PPT 新增幻灯片，以及本地保存后重新打开已在开发机器验证。发布代码的 11 项自动测试和 GitHub macOS/Linux 检查通过；另在新建的本地虚拟环境验证了三种格式的引擎转换、签名回调和原文件写回。**本发布安装器尚未完成第二台干净 Mac 的端到端安装验收**。自动检查不等于所有系统和 Office 功能均已验证。
 
 ## 安装
 
-### 1. 准备
+下载 [最新发布页](https://github.com/Zongejio/codex-local-office/releases/latest) 中的 **ZIP 安装包**，解压后双击 **双击安装.command**，点击“开始安装”。
 
-需要 Codex 桌面版、支持 `codex plugin` 的 Codex CLI，以及 [Homebrew](https://brew.sh)。建议电脑至少 8 GB 内存，并准备 40 GB 可用磁盘空间。虚拟环境默认分配 2 核 CPU、4 GB 内存和上限 40 GB 的虚拟磁盘；首次下载可能数 GB。
+环境准备、引擎安装和插件注册会自动完成，不需要自己输命令或安装 Homebrew。只在系统证书确认等必要环节提示。安装窗口会显示下载进度，请等待完成。
 
-下载源码后放到一个**长期保留**的目录，不要放在临时下载清理目录。可以通过 Git 克隆，也可以下载 ZIP 并解压。
+需要事先安装兼容的 Codex 桌面版。建议至少 8 GB 内存和 40 GB 可用磁盘空间；首次下载可能数 GB。当前安装包尚未经过 Apple 签名、公证，另一台 Mac 可能需要系统安全确认，不能承诺所有电脑双击即运行。
 
-### 2. 运行安装器
+安装完成后保存工作并重开 Codex 一次；首次打开三类文件时各选择一次 **Office 本地编辑器**。下载包可以移走，运行程序已经复制到固定位置。安装器不会自动关闭 Codex。
 
-在终端进入解压目录，运行：
-
-```bash
-bash Install.command
-```
-
-安装器会检查 Node.js、Lima 和 OpenSSL。缺失时先征求同意，再通过 Homebrew 安装；不会安装或启动 Docker。
-
-随后会：
-
-1. 为此电脑生成独立密钥和只用于 `localhost` 的连接证书。
-2. 下载带 SHA-256 校验的 Ubuntu 镜像，创建没有主机文件夹挂载的专用虚拟环境。
-3. 在虚拟环境中通过官方签名软件源安装固定版本 ONLYOFFICE Docs，并跳过不需要的额外插件下载。
-4. 提示是否将本机证书加入登录钥匙串。**此步骤需要你明确同意，不能无感跳过。**它不是通用 CA。
-5. 在你的应用数据目录生成这台电脑专用的 Codex 插件配置。
-
-不需要提供任何 API Key，不需要填写服务器地址，不需要上传文档。如果安装软件包期间提示第三方协议，请自己阅读并决定是否接受。
-
-### 3. 安装 Codex 插件
-
-安装器完成后运行：
-
-```bash
-codex plugin marketplace add "$HOME/Library/Application Support/CodexLocalOffice/marketplace"
-codex plugin add codex-local-office@codex-local-office
-```
-
-如果当前 Codex 会话没有加载新插件，完整退出并重新打开一次 Codex。然后在 Word、Excel、PPT 文件的“打开方式”中，各选择一次 **Office 本地编辑器**。当前兼容的 Codex 会记住每种文件的选择；不能仅靠修改配置文件来保证默认入口已经生效。
-
-> 只在 Codex 中添加 GitHub 仓库，不能代替本地引擎安装。必须先运行上述安装器。注册时添加的是安装器生成的本地 marketplace。
+[完整安装说明与系统提示](docs/INSTALLATION.md)
 
 ## 日常使用
 

@@ -17,7 +17,7 @@ async function command(s){const payload={c:'forcesave',key:s.key,userdata:secret
 const server=http.createServer(async(req,res)=>{try{
  if(!['127.0.0.1:43232','localhost:43232','host.lima.internal:43232','192.168.5.2:43232'].includes(req.headers.host))return send(res,403,{error:'拒绝未知主机'});
  const u=new URL(req.url,origin);const segments=u.pathname.split('/').filter(Boolean);const token=req.headers.authorization?.replace(/^Bearer /,'')||u.searchParams.get('token');
- if(u.pathname==='/health')return send(res,200,{ready:true,service:'codex-local-office',version:'0.4.0'});
+ if(u.pathname==='/health')return send(res,200,{ready:true,service:'codex-local-office',version:'0.5.0'});
  if(u.pathname==='/api/create'){
   if(req.method!=='POST'||!equal(token,master))return send(res,403,{error:'未授权'});
   const args=await body(req);if(!path.isAbsolute(args.sourcePath||'')||!/^[a-f0-9]{64}$/.test(args.expectedHash||''))throw Error('需要原文件路径及内容校验');const s=await store.create(args);return send(res,200,info(s));
