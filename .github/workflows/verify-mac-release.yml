@@ -1,0 +1,31 @@
+name: Verify public Mac installer
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: macos-latest
+    steps:
+      - name: Download public 0.6.0 installer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/office-public-release"
+          cd "$RUNNER_TEMP/office-public-release"
+          gh release download v0.6.0 --repo Zongejio/codex-local-office --pattern '*Mac-Notarized*.zip' --pattern '*.zip.sha256'
+          shasum -a 256 -c *.sha256
+          ditto -x -k ./*.zip extracted
+      - name: Verify signature and Apple notarization
+        run: |
+          APP="$RUNNER_TEMP/office-public-release/extracted/Office Local Editor Installer.app"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          codesign -dv --verbose=4 "$APP" 2>&1 | tee "$RUNNER_TEMP/office-signature.txt"
+          grep -F 'TeamIdentifier=T3L44XBF32' "$RUNNER_TEMP/office-signature.txt"
+          xcrun stapler validate "$APP"
+          spctl --assess --type execute --verbose=4 "$APP"
+          bash -n "$APP/Contents/Resources/payload/Install.command"
+      - name: Record validation scope
+        run: |
+          echo 'Public ZIP checksum, Developer ID signature, notarization ticket and Gatekeeper validated on a fresh GitHub macOS runner.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'This is NOT a full install test: Codex GUI, certificate consent, local Office VM, and edit/save/reopen were not exercised.' >> "$GITHUB_STEP_SUMMARY"

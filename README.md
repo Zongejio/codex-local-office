@@ -1,67 +1,56 @@
 # Office 本地编辑器
 
-在 Codex 中可直接打开 Word、Excel、PPT 进行修改，并将修改保存回本地原文件。
+在 Codex 标签页里打开、修改 Word、Excel、PPT，并保存回电脑上的原文件。
 
-无需租用云服务器。编辑引擎和文件保存服务都运行在使用者自己的电脑上。首次安装需要联网下载软件；正常的本地编辑、转换与保存不依赖外网。Codex 的 AI 对话仍需要网络。
+**适用：Apple 芯片 Mac（M1、M2、M3 等），macOS 14 或更新系统。** Windows、Intel Mac 暂不支持。请先安装支持插件文件打开方式的 Codex 桌面版。
 
-## 支持范围
+## 1. 下载哪个？
 
-- 当前安装器：**Apple 芯片 Mac（arm64）**，使用 Lima 的 macOS 虚拟化驱动；要求 macOS 14 或更新系统。
-- Codex 桌面版需要支持 MCP 文件入口和宿主本地路径元数据；旧版 Codex 不支持时会拒绝打开，不会猜测文件路径。
-- 文件类型：本地 `.docx`、`.xlsx`、`.pptx`，当前单文件上限 **20 MB**。
-- Windows、Intel Mac、云端文件、旧格式 `.doc/.xls/.ppt` **尚未支持或验证**。
-- 编辑器为 ONLYOFFICE Docs Community，不是 Microsoft Office 或 WPS，复杂排版、宏和特殊功能不能保证完全兼容。本项目禁用宏与额外插件。
+👉 **[下载 Mac 安装包（0.6.0）](https://github.com/Zongejio/codex-local-office/releases/download/v0.6.0/Office-Local-Editor-0.6.0-Mac-Notarized-1792921268283.zip)**
 
-Word 文本修改、Excel 单元格修改、PPT 新增幻灯片，以及本地保存后重新打开已在开发机器验证。发布代码的 11 项自动测试和 GitHub macOS/Linux 检查通过；另在新建的本地虚拟环境验证了三种格式的引擎转换、签名回调和原文件写回。**本发布安装器尚未完成第二台干净 Mac 的端到端安装验收**。自动检查不等于所有系统和 Office 功能均已验证。
+这是已通过 Apple 签名和公证的安装包。普通用户不用下载 `Source code` 或 `.sha256` 文件。
 
-## 安装
+## 2. 怎么安装？
 
-下载 [最新发布页](https://github.com/Zongejio/codex-local-office/releases/latest) 中的 **ZIP 安装包**，解压后双击 **Office Local Editor Installer.app**，点击“开始安装”。
+1. 双击下载的 ZIP 解压。
+2. 双击 **Office Local Editor Installer**（可能显示 `.app` 后缀），点击 **开始安装**。
+3. 等待安装完成；遇到系统打开确认、本机证书授权时，按提示确认。
+4. 保存手头工作，退出并重新打开 Codex 一次。
 
-环境准备、引擎安装和插件注册会自动完成，不需要自己输命令或安装 Homebrew。只在系统证书确认等必要环节提示。安装窗口会显示下载进度，请等待完成。
+不需要输入命令、配置密钥或租服务器。安装器会自动下载需要的组件，首次下载可能数 GB，请保持联网、不要关闭安装窗口。建议至少 8 GB 内存、40 GB 可用空间。
 
-需要事先安装兼容的 Codex 桌面版。建议至少 8 GB 内存和 40 GB 可用磁盘空间；首次下载可能数 GB。0.6.0 安装应用已通过 Apple Developer ID 签名和公证，公证票据已附加并通过 Gatekeeper 检查。首次打开下载应用、本机证书授权等系统确认仍可能出现。
+## 3. 怎么打开文件？
 
-安装完成后保存工作并重开 Codex 一次；首次打开三类文件时各选择一次 **Office 本地编辑器**。下载包可以移走，运行程序已经复制到固定位置。安装器不会自动关闭 Codex。
+在 Codex 聊天中点击生成的本地 Word、Excel 或 PPT 文件。
 
-[完整安装说明与系统提示](docs/INSTALLATION.md)
+**第一次使用：** 如果出现 Codex 自带预览，点文件的 **打开方式 → Office 本地编辑器**。三种格式首次使用时各选一次。编辑器会在 Codex 的浏览器标签页打开。
 
-## 日常使用
+以后直接点击文件；如果 Codex 仍打开只读预览，再从“打开方式”选择本插件。默认打开方式由 Codex 管理，不保证所有版本都会记住。
 
-点击本地文件 → 在 Codex 浏览器标签页打开完整版编辑器 → 修改 → 点击顶部 **保存到文件** → 等待“已保存到本地原文件”。
+## 4. 怎么保存？
 
-启动页可能仍会保留；它只负责启动编辑器，可以关闭，不承担文件保存。保存由本机后台负责，不需要维持两个标签页连接。当前没有可用接口让插件自动关闭这个启动页。
+修改完成 → 点击页面顶部 **保存到文件** → 等待 **已保存到本地原文件**。
 
-请以顶部“保存到文件”的确认提示为准，不要仅以编辑器内部自动保存提示判断磁盘文件已更新。原文件若已被另一个程序修改，会拒绝覆盖，并保留本次编辑版本。
+保存的是电脑上原来的那个文件，不需要下载、上传或另存一份。**不要只看编辑器内部的“自动保存”提示**，要看到页面顶部的保存成功提示。
 
-## 本地数据与资源
+若同时出现启动页和编辑器两个标签页，启动页可以关闭；保留编辑器即可继续编辑和保存。
 
-密钥、配置、日志和文档版本保存在：
+## 常见问题
 
-```text
-~/Library/Application Support/CodexLocalOffice/
-```
+- **需要云服务器吗？** 不需要。编辑和保存都在自己的电脑上完成。首次安装需要联网；Codex 的 AI 对话仍需要联网。
+- **支持哪些文件？** `.docx`、`.xlsx`、`.pptx`，单个文件不超过 20 MB；不支持旧格式 `.doc/.xls/.ppt`。
+- **和 Office/WPS 完全一样吗？** 使用 ONLYOFFICE 编辑器，复杂排版及特殊功能可能有差异；宏已禁用。
+- **提示文件冲突怎么办？** 原文件可能被其他软件修改过。插件会拒绝覆盖并保留本次编辑版本，先核对内容。
+- **安装中断怎么办？** 重新打开安装应用重试。已有文件和旧版本不会自动删除。
 
-专用虚拟机单独保存在 `~/.codex-office-vm/`，避免 macOS 对虚拟机套接字路径长度的限制。正常编辑不占外网下载带宽，主要消耗 CPU、内存和磁盘。引擎启动后会继续运行；不使用时可参考 [运维说明](docs/OPERATIONS.md) 停止。
+[详细安装与排查](docs/INSTALLATION.md) · [停止后台服务与更新](docs/OPERATIONS.md) · [隐私与安全](SECURITY.md)
 
-**不会自动删除历史版本**，因此长期使用会增加磁盘占用。仓库和发布包不包含任何用户证书、密钥、原文件、私人字体或虚拟机镜像。
+## 验证情况与开发资料
 
-## 检查与开发
+安装包签名、公证票据和 macOS 安全检查已通过；本机 Word、Excel、PPT 编辑保存与重新打开已验证，11 项自动测试及 GitHub Mac/Linux 检查通过。**第二台干净 Mac 上的完整安装、Codex 打开与编辑保存验收尚未完成。**
 
-```bash
-npm ci --ignore-scripts
-npm run build
-npm test
-npm run release:check
-node scripts/setup.mjs --dry-run
-npm run doctor
-```
+[架构与验证范围](docs/ARCHITECTURE.md) · [维护者签名流程](docs/SIGNING.md) · [第三方许可](NOTICE.md)
 
-`--dry-run` 只显示安装计划，不安装软件、不生成密钥、不修改证书信任、不启动虚拟机。`doctor` 只读检查，不输出密钥。
+运行数据保存在 `~/Library/Application Support/CodexLocalOffice/`，虚拟机保存在 `~/.codex-office-vm/`。后台会使用内存和磁盘，历史副本不会自动清理。发布包不包含维护者的私钥或私人文档。
 
-- [隐私与安全边界](SECURITY.md)
-- [运维、更新与停止](docs/OPERATIONS.md)
-- [架构与验证范围](docs/ARCHITECTURE.md)
-- [第三方组件与许可](NOTICE.md)
-
-本项目与 OpenAI、Microsoft、WPS、ONLYOFFICE 均无官方隶属或认证关系。项目代码使用 AGPL-3.0-only；第三方软件保留各自许可及商标要求。
+本项目与 OpenAI、Microsoft、WPS、ONLYOFFICE 均无官方隶属或认证关系。项目代码采用 AGPL-3.0-only。
