@@ -1,0 +1,8 @@
+import{App}from'@modelcontextprotocol/ext-apps';import{OpenAIExtensions}from'@openai/mcp-extensions/app';
+const app=new App({name:'codex-local-office',version:'0.4.0'},{},{autoResize:false}),ext=new OpenAIExtensions(app);
+const status=document.getElementById('status');document.getElementById('editor').remove();status.style.cssText='padding:20px;height:auto;white-space:pre-wrap;line-height:1.8';
+let connected=false,pending,opening=false,session;
+const show=s=>status.textContent=s;
+async function launch(){const u=new URL(session.url);u.protocol='https:';u.hostname='localhost';u.port='43233';const result=await app.openLink({url:u.href});if(result?.isError)throw Error('Codex 未打开编辑器');show('已打开完整编辑器。保存由本机后台负责，此标签页可以关闭。');}
+async function open(input){if(!connected){pending=input;return;}if(opening||session)return;if(!input.file){show('请点击本地 Word、Excel 或 PPT 文件打开。');return;}opening=true;try{if(!ext.resources)throw Error('Codex 未提供文件接口');show('正在打开本机编辑器…');const read=await ext.resources.read({uri:input.file.resourceUri,representation:'blob'});const item=read.contents.find(x=>x.uri===input.file.resourceUri);if(!item?.blob||!item.openaiMetadata?.writable)throw Error('当前文件不可写');const bytes=Uint8Array.from(atob(item.blob),c=>c.charCodeAt(0));const expectedHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');const r=await app.callServerTool({name:'office_panel_action',arguments:{operation:'create',expectedHash}});if(r.isError)throw Error(r.content?.[0]?.text||'创建失败');session=r.structuredContent.result;await launch();}catch(e){show(e.message);}finally{opening=false;}}
+app.addEventListener('toolinput',p=>open(p.arguments||{}));await app.connect();connected=true;if(pending)await open(pending);

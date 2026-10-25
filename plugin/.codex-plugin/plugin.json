@@ -1,0 +1,15 @@
+{
+  "name": "codex-local-office",
+  "version": "0.4.0",
+  "description": "在 Codex 标签页使用本机 ONLYOFFICE 编辑 Word、Excel、PPT，保存回文件并保留版本。",
+  "license": "AGPL-3.0-only",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Office 本地编辑器",
+    "shortDescription": "在 Codex 中编辑 Word、Excel、PPT，保存回本地原文件",
+    "category": "Productivity",
+    "defaultPrompt": [
+      "用 Office 本地编辑器打开文件"
+    ]
+  }
+}
