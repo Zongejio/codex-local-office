@@ -15,7 +15,7 @@ fi; }
 failed() { message "安装没有完成。已经完成的下载会保留。请保留此窗口中的错误信息，重新双击安装文件可重试。"; }
 trap failed ERR
 if [[ "$(uname -s)" != Darwin || "$(uname -m)" != arm64 ]]; then message '目前只支持 Apple 芯片 Mac。没有开始安装。'; exit 1; fi
-if [[ "$HEADLESS" != 1 ]]; then
+if [[ "$HEADLESS" != 1 && "${CODEX_OFFICE_INSTALL_CONFIRMED:-0}" != 1 ]]; then
  /usr/bin/osascript <<'APPLESCRIPT'
 display dialog "将自动准备运行环境、下载本地 Office 引擎并安装 Codex 插件。首次下载可能数 GB，需要约 40 GB 可用磁盘空间。文件只在本机处理，不安装 Docker。安装期间请保留终端窗口。" with title "安装 Office 本地编辑器" buttons {"取消", "开始安装"} default button "开始安装" cancel button "取消"
 APPLESCRIPT
