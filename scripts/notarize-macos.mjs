@@ -6,7 +6,7 @@ if(!app||!identity||!profile||!identity.startsWith('Developer ID Application:'))
 if(!app.endsWith('.app'))throw Error('Expected an app bundle.');
 await fs.access(path.join(app,'Contents/MacOS/OfficeInstaller'));
 const run=(cmd,args)=>execFileSync(cmd,args,{stdio:'inherit'});
-run('codesign',['--sign',identity,'--options','runtime','--timestamp',app]);
+run('codesign',['--force','--sign',identity,'--options','runtime','--timestamp',app]);
 run('codesign',['--verify','--deep','--strict','--verbose=2',app]);
 const archive=path.join(path.dirname(app),'notarization-'+Date.now()+'.zip');
 run('ditto',['-c','-k','--keepParent','--norsrc',app,archive]);
