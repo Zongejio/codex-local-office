@@ -6,7 +6,7 @@
 
 ## 支持范围
 
-- 当前安装器：**Apple 芯片 Mac（arm64）**，使用 Lima 的 macOS 虚拟化驱动；建议 macOS 14 或更新系统。
+- 当前安装器：**Apple 芯片 Mac（arm64）**，使用 Lima 的 macOS 虚拟化驱动；要求 macOS 14 或更新系统。
 - Codex 桌面版需要支持 MCP 文件入口和宿主本地路径元数据；旧版 Codex 不支持时会拒绝打开，不会猜测文件路径。
 - 文件类型：本地 `.docx`、`.xlsx`、`.pptx`，当前单文件上限 **20 MB**。
 - Windows、Intel Mac、云端文件、旧格式 `.doc/.xls/.ppt` **尚未支持或验证**。
@@ -16,11 +16,11 @@ Word 文本修改、Excel 单元格修改、PPT 新增幻灯片，以及本地�
 
 ## 安装
 
-下载 [最新发布页](https://github.com/Zongejio/codex-local-office/releases/latest) 中的 **ZIP 安装包**，解压后双击 **双击安装.command**，点击“开始安装”。
+下载 [最新发布页](https://github.com/Zongejio/codex-local-office/releases/latest) 中的 **ZIP 安装包**，解压后双击 **Office Local Editor Installer.app**，点击“开始安装”。
 
 环境准备、引擎安装和插件注册会自动完成，不需要自己输命令或安装 Homebrew。只在系统证书确认等必要环节提示。安装窗口会显示下载进度，请等待完成。
 
-需要事先安装兼容的 Codex 桌面版。建议至少 8 GB 内存和 40 GB 可用磁盘空间；首次下载可能数 GB。当前安装包尚未经过 Apple 签名、公证，另一台 Mac 可能需要系统安全确认，不能承诺所有电脑双击即运行。
+需要事先安装兼容的 Codex 桌面版。建议至少 8 GB 内存和 40 GB 可用磁盘空间；首次下载可能数 GB。0.6.0 安装应用已通过 Apple Developer ID 签名和公证，公证票据已附加并通过 Gatekeeper 检查。首次打开下载应用、本机证书授权等系统确认仍可能出现。
 
 安装完成后保存工作并重开 Codex 一次；首次打开三类文件时各选择一次 **Office 本地编辑器**。下载包可以移走，运行程序已经复制到固定位置。安装器不会自动关闭 Codex。
 

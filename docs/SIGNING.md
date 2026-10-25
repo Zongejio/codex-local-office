@@ -16,7 +16,7 @@ Apple Development、Apple Distribution 证书不能代替 Developer ID Applicati
 
 再运行 `node scripts/notarize-macos.mjs`，参数依次为应用完整路径、Developer ID Application 身份名称、已有钥匙串 profile 名称。脚本依次启用 hardened runtime 签名、检查签名、提交 Apple、确认 Accepted、staple、验证票据并执行 Gatekeeper 评估。
 
-只有全部成功才生成名为 `Office-Local-Editor-Mac-Notarized.zip` 的最终包。不要将签名前的包、Apple 返回 Invalid 的包或等待中的包标记为已公证。提交可能需要等待 Apple 处理。
+只有全部成功才生成名为 `Office-Local-Editor-<版本>-Mac-Notarized-<时间戳>.zip` 的最终包。不要将签名前的包、Apple 返回 Invalid 的包或等待中的包标记为已公证。提交可能需要等待 Apple 处理。
 
 所有最终发布资产必须重新检查不包含用户文档、私钥、密钥或运行数据。公证仅提交干净应用，用户的文档和本地编辑数据不上传。
 
