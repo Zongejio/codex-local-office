@@ -27,7 +27,7 @@ fi
 if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='onlyoffice'" | grep -q 1; then
   sudo -u postgres psql -v ON_ERROR_STOP=1 -c 'CREATE DATABASE onlyoffice OWNER onlyoffice;' >/dev/null
 fi
-printf '%s\n' 'onlyoffice-documentserver onlyoffice/db-host string localhost' "onlyoffice-documentserver onlyoffice/db-pwd password $office_db_password" 'onlyoffice-documentserver onlyoffice/ds-port select 8083' 'onlyoffice-documentserver onlyoffice/jwt-enabled boolean true' | sudo debconf-set-selections
+printf '%s\n' 'onlyoffice-documentserver onlyoffice/db-host string localhost' "onlyoffice-documentserver onlyoffice/db-pwd password $office_db_password" 'onlyoffice-documentserver onlyoffice/ds-port select 8083' 'onlyoffice-documentserver onlyoffice/jwt-enabled boolean true' 'onlyoffice-documentserver onlyoffice/plugins-enabled boolean false' | sudo debconf-set-selections
 sudo env DEBIAN_FRONTEND=noninteractive apt-get update -qq
 sudo env DEBIAN_FRONTEND=noninteractive apt-get install --no-remove -y onlyoffice-documentserver=10.0.0-169
 printf '%s\n' 'ONLYOFFICE installed in the local VM.'
