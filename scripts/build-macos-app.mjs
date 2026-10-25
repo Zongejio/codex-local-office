@@ -1,10 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {root} from '../src/paths.mjs';
 if(process.platform!=='darwin')throw Error('Build the Mac installer on macOS.');
 const version=JSON.parse(await fs.readFile(path.join(root,'package.json'))).version;
-const out=path.join(root,'artifacts','mac-installer-'+Date.now());
+// Keep the signing staging tree outside iCloud-synced folders; Finder metadata can invalidate signatures.
+const out=await fs.mkdtemp(path.join(os.tmpdir(),'codex-office-mac-'));
+execFileSync(process.execPath,[path.join(root,'scripts/release-check.mjs')],{cwd:root,stdio:'inherit'});
 const app=path.join(out,'Office Local Editor Installer.app');
 const contents=path.join(app,'Contents');
 await fs.mkdir(path.join(contents,'MacOS'),{recursive:true});

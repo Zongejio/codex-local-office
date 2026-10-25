@@ -1,6 +1,6 @@
 {
   "name": "codex-local-office",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "在 Codex 标签页使用本机 ONLYOFFICE 编辑 Word、Excel、PPT，保存回文件并保留版本。",
   "license": "AGPL-3.0-only",
   "mcpServers": "./.mcp.json",

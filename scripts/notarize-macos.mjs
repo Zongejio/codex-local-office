@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {root} from '../src/paths.mjs';
 const [app,identity,profile]=process.argv.slice(2);
 if(!app||!identity||!profile||!identity.startsWith('Developer ID Application:'))throw Error('Usage: node scripts/notarize-macos.mjs <app path> <Developer ID Application identity> <Keychain profile name>');
 if(!app.endsWith('.app'))throw Error('Expected an app bundle.');
@@ -16,7 +17,9 @@ if(receipt.status!=='Accepted')throw Error('Apple did not accept the submission.
 run('xcrun',['stapler','staple',app]);
 run('xcrun',['stapler','validate',app]);
 run('spctl',['--assess','--type','execute','--verbose=4',app]);
-const finalZip=path.join(path.dirname(app),'Office-Local-Editor-Mac-Notarized.zip');
+const version=JSON.parse(await fs.readFile(path.join(root,'package.json'))).version;
+await fs.mkdir(path.join(root,'artifacts'),{recursive:true});
+const finalZip=path.join(root,'artifacts',`Office-Local-Editor-${version}-Mac-Notarized-${Date.now()}.zip`);
 await fs.access(finalZip).then(()=>{throw Error('Output already exists; refusing to replace it.');},e=>{if(e.code!=='ENOENT')throw e;});
 run('ditto',['-c','-k','--keepParent','--norsrc',app,finalZip]);
 console.log(finalZip);

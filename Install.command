@@ -48,7 +48,7 @@ export PATH="$NODE_DIR/bin:$LIMA_DIR/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 node --version
 limactl --version
 printf '\n[2/5] 正在安装到固定位置…\n'
-APP_DIR="$(mktemp -d "$DATA_DIR/apps/office-0.5.0.XXXXXX")"
+APP_DIR="$(mktemp -d "$DATA_DIR/apps/office-0.6.0.XXXXXX")"
 for entry in src scripts plugin packaging package.json package-lock.json; do /bin/cp -R "$SOURCE_DIR/$entry" "$APP_DIR/"; done
 cd "$APP_DIR"
 npm ci --ignore-scripts --no-audit --no-fund

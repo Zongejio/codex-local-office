@@ -20,5 +20,5 @@ for(const name of ['config.toml','plugins/config.json']){
 }
 await run(['plugin','marketplace','add',path.join(dataDir,'marketplace'),'--json']);
 const result=JSON.parse(await run(['plugin','add','codex-local-office@codex-local-office','--json']));
-await fs.writeFile(path.join(dataDir,'last-install.json'),JSON.stringify({version:'0.5.0',installedAt:new Date().toISOString(),appDirectory:root,registered:true},null,2),{mode:0o600});
+await fs.writeFile(path.join(dataDir,'last-install.json'),JSON.stringify({version:'0.6.0',installedAt:new Date().toISOString(),appDirectory:root,registered:true},null,2),{mode:0o600});
 console.log('本地引擎与安全连接已就绪，Codex 插件注册完成。');
